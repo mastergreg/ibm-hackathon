@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% block title %}{% endblock %}
+{% block head %}
+{{ super() }}
+    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable(
+            JSON.parse({{ perfdata | tojson }})
+        );
+
+        var options = {
+          title: 'Server Performance'
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('perf_chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+
+    <script type='text/javascript'>
+     google.load('visualization', '1', {'packages': ['geochart']});
+     google.setOnLoadCallback(drawMarkersMap);
+
+      function drawMarkersMap() {
+      var data = google.visualization.arrayToDataTable(
+      JSON.parse({{ geosevdata | tojson }})
+      );
+
+      var options = {
+        region: 'world',
+        displayMode: 'markers',
+        colorAxis: {colors: ['green', 'orange']}
+      };
+
+      var chart = new google.visualization.GeoChart(document.getElementById('severity_chart_div'));
+      chart.draw(data, options);
+    };
+    </script>
+    <script type='text/javascript'>
+     google.load('visualization', '1', {'packages': ['geochart']});
+     google.setOnLoadCallback(drawMarkersMap);
+
+      function drawMarkersMap() {
+      var data = google.visualization.arrayToDataTable(
+      JSON.parse({{ geodata | tojson }})
+      );
+
+      var options = {
+        region: 'world',
+        displayMode: 'markers',
+        colorAxis: {colors: ['blue', 'red']}
+      };
+
+      var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    };
+    </script>
+{% endblock %}
+{% block content %}
+  <p class="important">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="tab-content">
+        <div id="tab_chart_div">
+          <h2>Flash Ratio</h2>
+          <div id="chart_div"></div>
+        </div>
+        <div id="tab_severity_chart_div">
+          <h2>Severity of Flash</h2>
+          <div id="severity_chart_div"></div>
+        </div>
+      </div>
+        <div id="perf_chart_div" class="col-mid-4" ></div>
+        <div class="panel">
+         <a onclick="toggle_urgent()">Urgent Attention</a>
+      <div id="urgent-table" style="display:none">
+      <div class="table-responsive" id="urgent-table">
+        <table class="table" >
+          <thead>
+            <th>Identifier</th>
+            <th>Location</th>
+            <th>Severity</th>
+          </thead>
+          {% for row in jsontable %}
+          {% if row.Flash == 1 %}
+          <tr {% if row.Severity == 1%}class="bg-primary"{% endif %}
+              {% if row.Severity == 2%}class="bg-success"{% endif %}
+              {% if row.Severity == 3%}class="bg-info"{% endif %}
+              {% if row.Severity == 4%}class="bg-warning"{% endif %}
+              {% if row.Severity == 5%}class="bg-danger"{% endif %}>
+          <td>{{ row.Identifier }}</td>
+          <td>{{ row.Location }}</td>
+          <td>{{ row.Severity }}</td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </table>
+        </div>
+      </div>
+        </div>
+        <div class="panel">
+          <a onclick="toggle_todo()">TODO</a>
+      <div id="todo-table" style="display:none">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <th>Identifier</th>
+            <th>Location</th>
+            <th>Severity</th>
+          </thead>
+          {% for row in jsontable %}
+          {% if row.Flash == 0 and row.Acknowledged == 0 %}
+          <tr {% if row.Severity == 1%}class="bg-primary"{% endif %}
+              {% if row.Severity == 2%}class="bg-success"{% endif %}
+              {% if row.Severity == 3%}class="bg-info"{% endif %}
+              {% if row.Severity == 4%}class="bg-warning"{% endif %}
+              {% if row.Severity == 5%}class="bg-danger"{% endif %}>
+          <td>{{ row.Identifier }}</td>
+          <td>{{ row.Location }}</td>
+          <td>{{ row.Severity }}</td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </table>
+      </div>
+        </div>
+        </div>
+        <div class="panel">
+        <a onclick="toggle_pending()">In Progress</a>
+      <div id="pending-table" style="display:none">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <th>Identifier</th>
+            <th>Location</th>
+            <th>Severity</th>
+          </thead>
+          {% for row in jsontable %}
+          {% if row.Flash == 0 and row.Acknowledged == 1 %}
+          <tr {% if row.Severity == 1%}class="bg-primary"{% endif %}
+              {% if row.Severity == 2%}class="bg-success"{% endif %}
+              {% if row.Severity == 3%}class="bg-info"{% endif %}
+              {% if row.Severity == 4%}class="bg-warning"{% endif %}
+              {% if row.Severity == 5%}class="bg-danger"{% endif %}>
+          <td>{{ row.Identifier }}</td>
+          <td>{{ row.Location }}</td>
+          <td>{{ row.Severity }}</td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </table>
+      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</p>
+{% endblock %}
+
+<!-- vim:set ft=htmljinja -->

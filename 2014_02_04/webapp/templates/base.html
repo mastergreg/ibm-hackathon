@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+{% block head %}
+<link href="static/css/bootstrap.min.css" rel="stylesheet">
+<link href="static/css/sticky-footer.css" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{% endblock %} - IBM Hackathon</title>
+{% endblock %}
+</head>
+<body>
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top" id="myTab" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">IBM Hack</a>
+    </div>
+  </div>
+</div>
+  <div class="container" id="content">
+    {% block content %}{% endblock %}
+  </div>
+<div id="footer" class="container">
+    {% block footer %}
+    &copy; Copyright 2014 by <a href="http://domain.invalid/">f00</a>.
+    {% endblock %}
+</div>
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="static/js/bootstrap.min.js"></script>
+  <script>
+</script>
+<script>
+function toggle_pending()
+{
+  if(document.getElementById("pending-table").style.display=="none"){
+   document.getElementById("pending-table").style.display="block";}
+  else if(document.getElementById("pending-table").style.display=="block"){
+   document.getElementById("pending-table").style.display="none";}
+}
+
+function toggle_todo()
+{
+  if(document.getElementById("todo-table").style.display=="none"){
+   document.getElementById("todo-table").style.display="block";}
+  else if(document.getElementById("todo-table").style.display=="block"){
+   document.getElementById("todo-table").style.display="none";}
+}
+
+function toggle_urgent()
+{
+  if(document.getElementById("urgent-table").style.display=="none"){
+   document.getElementById("urgent-table").style.display="block";}
+  else if(document.getElementById("urgent-table").style.display=="block"){
+   document.getElementById("urgent-table").style.display="none";}
+}
+
+</script>
+</body>
+</html>
+<!-- vim:set ft=htmljinja -->
